@@ -1,14 +1,14 @@
 {
-  "name": "react-native-image-cropping",
+  "name": "react-native-odinvt-image-cropping",
   "version": "1.0.0",
   "keywords": "react-native image cropping",
   "description": "Simple image cropping library for react-native.",
   "license": "MIT",
-  "repository": "meznaric/react-native-image-cropping",
+  "repository": "odinvt/react-native-image-cropping",
   "dependencies": {
     "TOCropViewController": "git+https://github.com/meznaric/TOCropViewController.git"
   },
   "peerDependencies": {
-    "react-native": "^0.28.0"
+    "react-native": "^0.48.4"
   }
 }
