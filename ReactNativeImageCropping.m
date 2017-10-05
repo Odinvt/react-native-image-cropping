@@ -6,6 +6,7 @@
 
 @property (nonatomic, strong) RCTPromiseRejectBlock _reject;
 @property (nonatomic, strong) RCTPromiseResolveBlock _resolve;
+@property (nonatomic, strong) UIImage *loadedImage;
 @property TOCropViewControllerAspectRatio aspectRatio;
 
 
@@ -51,8 +52,6 @@ RCT_EXPORT_METHOD(  cropImageWithUrl:(NSString *)imageUrl
 
 )
 {
-    self._reject = reject;
-    self._resolve = resolve;
     self.aspectRatio = NULL;
     
     NSURLRequest *imageUrlrequest = [NSURLRequest requestWithURL:[NSURL URLWithString:imageUrl]];
@@ -60,7 +59,8 @@ RCT_EXPORT_METHOD(  cropImageWithUrl:(NSString *)imageUrl
     [self.bridge.imageLoader loadImageWithURLRequest:imageUrlrequest callback:^(NSError *error, UIImage *image) {
         if(error) reject(@"100", @"Failed to load image", error);
         if(image) {
-            [self handleImageLoad:image];
+             self.loadedImage = image;
+             resolve(nil);
         }
     }];
 }
@@ -71,8 +71,6 @@ RCT_EXPORT_METHOD(cropImageWithUrlAndAspect:(NSString *)imageUrl
                                    rejecter:(RCTPromiseRejectBlock)reject
         )
 {
-    self._reject = reject;
-    self._resolve = resolve;
     self.aspectRatio = aspectRatio;
     
     NSURLRequest *imageUrlrequest = [NSURLRequest requestWithURL:[NSURL URLWithString:imageUrl]];
@@ -80,14 +78,19 @@ RCT_EXPORT_METHOD(cropImageWithUrlAndAspect:(NSString *)imageUrl
     [self.bridge.imageLoader loadImageWithURLRequest:imageUrlrequest callback:^(NSError *error, UIImage *image) {
         if(error) reject(@"100", @"Failed to load image", error);
         if(image) {
-            [self handleImageLoad:image];
+             self.loadedImage = image;
+             resolve(nil);
         }
     }];
-
 }
-
-- (void)handleImageLoad:(UIImage *)image {
-    
+RCT_EXPORT_METHOD(handleImageLoad:(NSString *)imageUrl
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject
+                  )
+{
+    self._reject = reject;
+    self._resolve = resolve;
+    UIImage *image = self.loadedImage;
     UIViewController *root = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
     TOCropViewController *cropViewController = [[TOCropViewController alloc] initWithImage:image];
     cropViewController.delegate = self;

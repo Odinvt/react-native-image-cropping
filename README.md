@@ -41,11 +41,15 @@ const originalImage = require('CrazyFlowers.jpg');
 
 ReactNativeImageCropping
 	.cropImageWithUrl(originalImage.uri)
-    .then(image => {
-		//Image is saved in NSTemporaryDirectory!
-		//image = {uri, width, height}	
-	},
-	err => console.log(b));
+    .then(() => {
+        ReactNativeImageCropping.handleImageLoad("").then(image => {
+            //Image is saved in NSTemporaryDirectory!
+            //image = {uri, width, height}  
+        },
+        err => console.log(b))
+    }).catch((err) => {
+        // couldn't load the image
+    });
 ```
 
 #### Lock to specific aspect ratio:
@@ -69,11 +73,15 @@ let aspectRatio = ReactNativeImageCropping.AspectRatioSquare;
 
 ReactNativeImageCropping
     .cropImageWithUrlAndAspect(imageUrl, aspectRatio)
-    .then(image => {
-        //Image is saved in NSTemporaryDirectory!
-        //image = {uri, width, height}  
-    },
-    err => console.log(b));
+    .then(() => {
+        ReactNativeImageCropping.handleImageLoad("").then(image => {
+            //Image is saved in NSTemporaryDirectory!
+            //image = {uri, width, height}  
+        },
+        err => console.log(b))
+    }).catch((err) => {
+        // couldn't load the image
+    });
 ```
 
 
